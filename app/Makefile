@@ -1,6 +1,6 @@
 setup:
 	npm install
-	./gradlew wrapper --gradle-version 8.5
+	./gradlew wrapper --gradle-version 8.6
 	./gradlew build
 
 frontend:
@@ -36,8 +36,8 @@ lint:
 test:
 	./gradlew test
 
-# report:
-# 	./gradlew jacocoTestReport
+report:
+	./gradlew jacocoTestReport
 
 update-js-deps:
 	npx ncu -u
@@ -47,7 +47,7 @@ check-java-deps:
 
 # generate-migrations:
 # 	gradle diffChangeLog
-
+#
 # db-migrate:
 # 	./gradlew update
 
