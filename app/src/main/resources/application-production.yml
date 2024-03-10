@@ -1,0 +1,7 @@
+---
+# production - postgersql
+spring:
+  datasource:
+    url: jdbc:postgresql://dpg-cncavmed3nmc738eq0fg-a/database123_vxfv
+    username: "database123_vxfv_user"
+    password: "c7986336d4a862c319dbdcbcb4850ab96fff6d1b496aec6ea63cc0e7c60cfce1"

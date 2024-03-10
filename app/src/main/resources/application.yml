@@ -1,0 +1,17 @@
+---
+logging:
+  level:
+    root: WARN
+
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    default: development
+
+server:
+  address: 0.0.0.0
