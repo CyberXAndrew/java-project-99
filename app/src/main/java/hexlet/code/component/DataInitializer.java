@@ -8,26 +8,21 @@ import org.springframework.stereotype.Component;
 
 import hexlet.code.model.User;
 
-import hexlet.code.repository.UserRepository;
-//import hexlet.code.service.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
-import net.datafaker.Faker;
 
 @Component
 @AllArgsConstructor
 public class DataInitializer implements ApplicationRunner {
 
-//    @Autowired
-//    private UserRepository userRepository;
-
     @Autowired
     private UserService userService;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         User userData = new User();
+        userData.setFirstName("Admin");
         userData.setEmail("hexlet@example.com");
-        userData.setPassword("qwerty");
+        userData.setPasswordDigest("qwerty");
         userService.createUser(userData);
     }
 }
