@@ -14,13 +14,14 @@ jobs:
         with:
           java-version: '20'
           distribution: 'temurin'
-      - uses: gradle/gradle-build-action@v2
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: 8.3
-      - run: ./gradlew checkstyleMain
-      - run: ./gradlew test
-      - name: Publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
+          gradle-version: 8.6
+          arguments: build
+          build-root-directory: app
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.2.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
           JACOCO_SOURCE_PATH: app/src/main/java
