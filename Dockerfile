@@ -28,11 +28,11 @@ RUN ./gradlew --no-daemon dependencies
 #COPY lombok.config .
 COPY app/src app/src
 
-COPY --from=frontend /frontend/dist /backend/src/main/resources/static
+#COPY --from=frontend /frontend/dist /backend/src/main/resources/static
 
 RUN ./gradlew --no-daemon build
 
 ENV JAVA_OPTS "-Xmx512M -Xms512M"
 EXPOSE 8080
 
-CMD java -jar app/build/libs/HexletSpringBlog-1.0-SNAPSHOT.jar #добавил app
+#CMD java -jar app/build/libs/HexletSpringBlog-1.0-SNAPSHOT.jar #добавил app
