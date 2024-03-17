@@ -1,14 +1,14 @@
-FROM node:20.6.1 AS frontend
-
-WORKDIR /frontend
-
-COPY frontend/package*.json .
-
-RUN npm ci
-
-COPY frontend /frontend
-
-RUN npm run build
+#FROM node:20.6.1 AS frontend
+#
+#WORKDIR /frontend
+#
+#COPY frontend/package*.json .
+#
+#RUN npm ci
+#
+#COPY frontend /frontend
+#
+#RUN npm run build
 
 FROM eclipse-temurin:20-jdk
 
