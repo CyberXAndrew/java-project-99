@@ -18,10 +18,10 @@ RUN apt-get update && apt-get install -yq make unzip
 
 WORKDIR /backend
 
-COPY gradle ./app/gradle
-COPY build.gradle ./app
-COPY settings.gradle ./app
-COPY gradlew ./app
+COPY app/gradle gradle
+COPY app/build.gradle .
+COPY app/settings.gradle .
+COPY app/gradlew .
 
 RUN ./gradlew --no-daemon dependencies
 
