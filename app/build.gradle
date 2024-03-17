@@ -41,8 +41,7 @@ dependencies {
 	testImplementation 'junit:junit:4.13.2' // assertTrue
 	testImplementation 'org.assertj:assertj-core:3.25.3'
 	implementation 'org.instancio:instancio-junit:3.3.0'
-//	implementation 'net.datafaker:datafaker:2.1.0'
-	implementation("net.datafaker:datafaker:2.0.2")
+	implementation("net.datafaker:datafaker:2.1.0")
 
 	implementation 'com.h2database:h2:2.2.224'
 //	runtimeOnly("com.h2database:h2")

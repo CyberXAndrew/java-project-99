@@ -4,9 +4,9 @@ import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
@@ -14,18 +14,16 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsManager {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    public void createUser(@Valid User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPasswordDigest(encodedPassword);
-        int asdsa = user.getPassword().hashCode();
-        String pas = String.valueOf(asdsa);
-        user.setPasswordDigest(pas);
-        user.setEmail(user.getEmail());
+    @Override
+    public void createUser(@Valid UserDetails userData) {
+        User user = new User();
+        String hashedPassword = passwordEncoder.encode(userData.getPassword());
+        user.setPasswordDigest(hashedPassword);
+        user.setEmail(userData.getUsername()); //email
+//        user.setFirstName(userData.get); ?
 
         userRepository.save(user);
     }
@@ -35,11 +33,6 @@ public class UserService implements UserDetailsManager {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-
-    @Override
-    public void createUser(UserDetails userData) {
-        throw new UnsupportedOperationException("Unimplemented method 'createUser'");
-    }
     @Override
     public void updateUser(UserDetails user) {
         throw new UnsupportedOperationException("Unimplemented method 'updateUser'");

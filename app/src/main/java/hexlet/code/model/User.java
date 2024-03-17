@@ -45,10 +45,10 @@ public class User implements UserDetails, BaseEntity {
     @LastModifiedDate
     private LocalDate updatedAt;
 
+    @Override
     public String getPassword() {
         return passwordDigest;
     }
-
     @Override
     public String getUsername() {
         return email;

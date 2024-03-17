@@ -15,12 +15,12 @@ import lombok.AllArgsConstructor;
 public class DataInitializer implements ApplicationRunner {
 
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public void run(ApplicationArguments args) {
         User userData = new User();
-        userData.setFirstName("Admin");
+//        userData.setFirstName("Admin"); // сервис не поддерживает поле
         userData.setEmail("hexlet@example.com");
         userData.setPasswordDigest("qwerty");
         userService.createUser(userData);

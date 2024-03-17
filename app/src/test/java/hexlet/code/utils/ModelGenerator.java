@@ -23,7 +23,7 @@ public class ModelGenerator {
         userModel = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
                 .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
-                .supply(Select.field(User::getPassword), () -> faker.internet().password())
+                .supply(Select.field(User::getPasswordDigest), () -> faker.internet().password())
                 .toModel();
     }
 }
