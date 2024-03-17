@@ -18,14 +18,14 @@ RUN apt-get update && apt-get install -yq make unzip
 
 WORKDIR /backend
 
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY gradlew .
+COPY gradle ./app/gradle
+COPY build.gradle ./app
+COPY settings.gradle ./app
+COPY gradlew ./app
 
 RUN ./gradlew --no-daemon dependencies
 
-COPY lombok.config .
+#COPY lombok.config .
 COPY app/src app/src
 
 COPY --from=frontend /frontend/dist /backend/src/main/resources/static
