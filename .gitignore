@@ -45,11 +45,11 @@ node
 
 .env
 
-node_modules
+app/node_modules
 .tmp
 
-src/main/resources/static
-!src/main/resources/static/.gitkeep
+app/src/src/main/resources/static
+!app/src/src/main/resources/static/.gitkeep
 
 # Logs
 logs
@@ -60,7 +60,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+app/node_modules
 dist
 dist-ssr
 *.local

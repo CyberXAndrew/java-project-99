@@ -3,14 +3,13 @@ package hexlet.code.controller;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.dto.UserUpdateDTO;
-import hexlet.code.exception.ResourceNotFoundException;
 import hexlet.code.mapper.UserMapper;
-import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import hexlet.code.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
-
 import java.util.List;
 
 @RestController
@@ -32,45 +30,38 @@ public class UsersController {
     @Autowired
     private UserMapper mapper;
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @GetMapping(path = "")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UserDTO> index() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(mapper::map).toList();
+    public ResponseEntity<List<UserDTO>> index() { //  List<UserDTO>
+        List<UserDTO> allUsers = userService.getAllUsers();
+        return ResponseEntity.ok()
+//                .header("Access-Control-Expose-Headers", "X-Total-Count")
+                .header("X-Total-Count", String.valueOf(allUsers.size()))
+                .body(allUsers);// Access-Control-Expose-Headers header X-Total-Count
     }
 
     @GetMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO show(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User with id [" + id + "] was not found in DB"));
-        return mapper.map(user);
+        return userService.findUserById(id);
     }
 
     @PostMapping(path = "")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO create(@Valid @RequestBody UserCreateDTO createDTO) {
-        User user = mapper.map(createDTO);
-        service.createUser(user);
-        return mapper.map(user);
+        return userService.createUser(createDTO);
     }
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO update(@Valid @RequestBody UserUpdateDTO updateDTO, @PathVariable Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("User with id [" + id + "] was not found in DB"));
-        mapper.update(updateDTO, user);
-        userRepository.save(user);
-        return mapper.map(user);
+        return userService.updateUser(updateDTO, id);
     }
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        userService.deleteUserById(id);
     }
 }

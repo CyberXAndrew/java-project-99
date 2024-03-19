@@ -4,9 +4,12 @@ import hexlet.code.dto.UserDTO;
 import hexlet.code.model.User;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserUpdateDTO;
+import org.aspectj.lang.annotation.Before;
 import org.mapstruct.*;
+import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Mapper(
@@ -18,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public abstract class UserMapper {
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Mapping(target = "passwordDigest", source = "password")
     public abstract User map(UserCreateDTO userCreateDTO);
@@ -29,5 +32,13 @@ public abstract class UserMapper {
     public void encryptPassword(UserCreateDTO createDTO) {
         String password = createDTO.getPassword();
         createDTO.setPassword(passwordEncoder.encode(password));
+    }
+
+    @BeforeMapping
+    public void encryptPassword(UserUpdateDTO updateDTO) {
+        if (updateDTO.getPassword() != null) {
+            String password = updateDTO.getPassword().get();
+            updateDTO.setPassword(JsonNullable.of(passwordEncoder.encode(password)));
+        }
     }
 }

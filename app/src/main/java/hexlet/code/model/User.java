@@ -59,7 +59,6 @@ public class User implements UserDetails, BaseEntity {
         return new ArrayList<GrantedAuthority>();
     }
 
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
