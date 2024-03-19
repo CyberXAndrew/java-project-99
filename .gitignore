@@ -48,7 +48,7 @@ node
 app/node_modules
 .tmp
 
-app/src/src/main/resources/static
+
 !app/src/src/main/resources/static/.gitkeep
 
 # Logs
