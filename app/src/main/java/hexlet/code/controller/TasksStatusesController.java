@@ -1,5 +1,6 @@
 //package hexlet.code.controller;
 //
+//import hexlet.code.dto.TaskStatusDTO;
 //import hexlet.code.model.TaskStatus;
 //import hexlet.code.repository.TaskStatusRepository;
 //import org.springframework.beans.factory.annotation.Autowired;
