@@ -8,7 +8,7 @@ COPY package*.json .
 RUN npm ci
 
 #COPY frontend /frontend
-COPY app/node_modules /frontend/node_modules
+COPY app/node_modules/@hexlet/java-task-manager-frontend /frontend
 
 RUN npm run build
 
