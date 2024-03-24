@@ -1,10 +1,9 @@
 package hexlet.code.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.model.User;
-import hexlet.code.repository.UserRepository;
+import hexlet.code.model.TaskStatus;
+import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.utils.ModelGenerator;
-import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,99 +35,98 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UsersControllerTest {
-    private User testUser;
+public class TasksStatusesControllerTest {
+    private TaskStatus testTaskStatus;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
+    private static final String TEST_URL = "/api/task_statuses";
+    private static final Long DRAFT_STATUS_DB_ID = 1L;
 
     @Autowired
     private ModelGenerator modelGenerator;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private Faker faker;
-    @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private TaskStatusRepository taskStatusRepository;
 
     @BeforeEach
     public void beforeEach() {
         token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
-        testUser = Instancio.of(modelGenerator.getUserModel()).create();
-        userRepository.save(testUser);
+        testTaskStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
+        taskStatusRepository.save(testTaskStatus);
     }
 
     @AfterEach
     public void afterEach() {
-        userRepository.deleteById(testUser.getId());
+        taskStatusRepository.deleteById(testTaskStatus.getId());
     }
 
     @Test
     public void testIndex() throws Exception {
-        MvcResult result = mockMvc.perform(
-                get("/api/users")
-                        .with(jwt())
-        ).andExpect(status().isOk()).andReturn();
+        mockMvc.perform(
+                get(TEST_URL)
+                        .with(token)
+        ).andExpect(status().isOk());
 
-        String content = result.getResponse().getContentAsString();
-        assertThat(content).contains(testUser.getEmail());
+        List<TaskStatus> statuses = taskStatusRepository.findAll();
+        assertThat(statuses.stream().map(stat -> stat.getSlug())).contains("draft", "to_review", "to_be_fixed", "to_publish", "published");
     }
 
     @Test
     public void testShow() throws Exception {
-        MvcResult result = mockMvc.perform(
-                get("/api/users/{id}", testUser.getId())
-                        .with(jwt())
-        ).andExpect(status().isOk()).andReturn();
+        mockMvc.perform(
+                get(TEST_URL + "/{id}", DRAFT_STATUS_DB_ID) // cast to int?
+                        .with(token)
+        ).andExpect(status().isOk());
 
-        String content = result.getResponse().getContentAsString();
-        assertThat(content).contains(testUser.getEmail(), testUser.getFirstName());
+        TaskStatus taskStatus = taskStatusRepository.findById(DRAFT_STATUS_DB_ID).get();
+        assertThat(taskStatus.getSlug()).isEqualTo("draft");
+        assertThat(taskStatus.getName()).isEqualTo("Draft");
     }
 
     @Test
     public void testCreate() throws Exception {
-        User createUser = Instancio.of(modelGenerator.getUserModel()).create();
-
+        TaskStatus statusToSave = Instancio.of(modelGenerator.getTaskStatusModel()).create();
         mockMvc.perform(
-                post("/api/users")
+                post(TEST_URL)
                         .with(token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUser))
+                        .content(objectMapper.writeValueAsString(statusToSave))
         ).andExpect(status().isCreated());
 
-        User userFromRepo = userRepository.findByEmail(createUser.getEmail()).get();
+        TaskStatus savedStatus = taskStatusRepository.findBySlug(statusToSave.getSlug()).get();
 
-        assertNotNull(userFromRepo);
-        assertThat(createUser.getFirstName()).isEqualTo(userFromRepo.getFirstName());
-        assertThat(createUser.getEmail()).isEqualTo(userFromRepo.getEmail());
+        assertNotNull(savedStatus);
+        assertThat(savedStatus.getName()).isEqualTo(statusToSave.getName());
+        assertThat(savedStatus.getSlug()).isEqualTo(statusToSave.getSlug());
     }
 
     @Test
     public void testUpdate() throws Exception {
         Map<String, String> updateData = new HashMap<>() {{
-            put("firstName", "Andrew");
-            put("email", "mail@example.com");
+            put("name", "Testname");
+            put("slug", "Testslug");
         }};
-
         mockMvc.perform(
-                put("/api/users/{id}", testUser.getId())
+                put(TEST_URL + "/{id}", testTaskStatus.getId())
                         .with(token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateData))
         ).andExpect(status().isOk());
 
-        User updatedUser = userRepository.findById(testUser.getId()).get();
-        assertThat(updatedUser.getFirstName()).isEqualTo("Andrew");
-        assertThat(updatedUser.getEmail()).isEqualTo("mail@example.com");
+        TaskStatus updatedStatus = taskStatusRepository.findById(testTaskStatus.getId()).get();
+        assertThat(updatedStatus.getName()).isEqualTo("Testname");
+        assertThat(updatedStatus.getSlug()).isEqualTo("Testslug");
     }
 
     @Test
     public void testDelete() throws Exception {
         mockMvc.perform(
-                delete("/api/users/{id}", testUser.getId())
+                delete(TEST_URL + "/{id}", testTaskStatus.getId())
                         .with(token)
         ).andExpect(status().isNoContent());
 
-        assertThat(userRepository.findById(testUser.getId())).isEmpty();
+        assertThat(taskStatusRepository.findById(testTaskStatus.getId())).isEmpty();
     }
 }

@@ -33,12 +33,11 @@ public class UsersController {
     private UserService userService;
 
     @GetMapping(path = "")
-    public ResponseEntity<List<UserDTO>> index() { //  List<UserDTO>
+    public ResponseEntity<List<UserDTO>> index() {
         List<UserDTO> allUsers = userService.getAllUsers();
         return ResponseEntity.ok()
-//                .header("Access-Control-Expose-Headers", "X-Total-Count")
                 .header("X-Total-Count", String.valueOf(allUsers.size()))
-                .body(allUsers);// Access-Control-Expose-Headers header X-Total-Count
+                .body(allUsers);
     }
 
     @GetMapping(path = "/{id}")

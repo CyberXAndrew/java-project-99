@@ -14,11 +14,9 @@ import org.openapitools.jackson.nullable.JsonNullable;
 public class UserUpdateDTO {
     private JsonNullable<String> firstName;
     private JsonNullable<String> lastName;
-    @NotBlank
     @Email
     @Column(unique = true)
     private JsonNullable<String> email;
-    @NotNull
     @Size(min = 3)
     private JsonNullable<String> password;
 }

@@ -1,6 +1,11 @@
 package hexlet.code.utils;
 
+import hexlet.code.dto.TaskStatusCreateDTO;
+import hexlet.code.model.Task;
+import hexlet.code.model.TaskStatus;
 import hexlet.code.model.User;
+import hexlet.code.repository.TaskStatusRepository;
+import hexlet.code.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import net.datafaker.Faker;
@@ -14,9 +19,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ModelGenerator {
     private Model<User> userModel;
+    private Model<TaskStatus> taskStatusModel;
+    private Model<Task> taskModel;
 
     @Autowired
     private Faker faker;
+    @Autowired
+    private TaskStatusRepository statusRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostConstruct
     private void init() {
@@ -24,6 +35,15 @@ public class ModelGenerator {
                 .ignore(Select.field(User::getId))
                 .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
                 .supply(Select.field(User::getPasswordDigest), () -> faker.internet().password())
+                .toModel();
+
+        taskStatusModel = Instancio.of(TaskStatus.class)
+                .ignore(Select.field(TaskStatus::getId))
+                .supply(Select.field(TaskStatus::getSlug), () -> faker.internet().slug())
+                .toModel();
+
+        taskModel = Instancio.of(Task.class)
+                .ignore(Select.field(Task::getId))
                 .toModel();
     }
 }

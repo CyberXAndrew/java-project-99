@@ -41,12 +41,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/pages/*").permitAll()
                         .requestMatchers("/assets/**").permitAll()
                         .anyRequest().authenticated())
-//                    .formLogin(form -> form
-//                            .loginPage("/api/login")
-//                            .permitAll())
-//                    .logout(logout -> logout
-//                            .logoutUrl("/logout")
-//                            .permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer((rs) -> rs.jwt((jwt) -> jwt.decoder(jwtDecoder)))
                 .httpBasic(Customizer.withDefaults())

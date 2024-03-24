@@ -4,22 +4,19 @@ import hexlet.code.dto.UserDTO;
 import hexlet.code.model.User;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserUpdateDTO;
-import org.aspectj.lang.annotation.Before;
 import org.mapstruct.*;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Mapper(
-        uses = { JsonNullableMapper.class },
+        uses = { JsonNullableMapper.class, ReferenceMapper.class },
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
         unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class UserMapper {
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
