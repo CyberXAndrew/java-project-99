@@ -2,11 +2,13 @@ FROM node:20.6.1 AS frontend
 
 WORKDIR /frontend
 
-COPY frontend/package*.json .
+#COPY frontend/package*.json .
+COPY package*.json .
 
 RUN npm ci
 
-COPY frontend /frontend
+#COPY frontend /frontend
+COPY node_modules /frontend
 
 RUN npm run build
 
