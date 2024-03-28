@@ -2,6 +2,7 @@ package hexlet.code.dto;
 
 import lombok.Data;
 import java.time.Instant;
+import java.util.Set;
 
 @Data
 public class TaskDTO {
@@ -13,4 +14,5 @@ public class TaskDTO {
     private String status;
     private Long assignee_id;
     private Instant createdAt;
+    private Set<Long> labelIds;
 }

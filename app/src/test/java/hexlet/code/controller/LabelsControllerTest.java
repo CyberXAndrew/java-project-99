@@ -1,8 +1,8 @@
 package hexlet.code.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hexlet.code.model.User;
-import hexlet.code.repository.UserRepository;
+import hexlet.code.model.Label;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.utils.ModelGenerator;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.AfterEach;
@@ -10,22 +10,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,16 +34,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UsersControllerTest {
+public class LabelsControllerTest {
 
-    private final static String TEST_URL = "/api/users";
-    private User testUser;
+    private final static String TEST_URL = "/api/labels";
+    private Label testLabel;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
     @Autowired
     private ModelGenerator modelGenerator;
     @Autowired
-    private UserRepository userRepository;
+    private LabelRepository labelRepository;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -53,81 +52,79 @@ public class UsersControllerTest {
     @BeforeEach
     public void beforeEach() {
         token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
-        testUser = Instancio.of(modelGenerator.getUserModel()).create();
-        userRepository.save(testUser);
+        testLabel = Instancio.of(modelGenerator.getLabelModel()).create();
+        labelRepository.save(testLabel);
     }
 
     @AfterEach
     public void afterEach() {
-        userRepository.deleteById(testUser.getId());
+        labelRepository.delete(testLabel);
     }
 
     @Test
     public void testIndex() throws Exception {
         MvcResult result = mockMvc.perform(
                 get(TEST_URL)
-                        .with(jwt())
+                        .with(token)
         ).andExpect(status().isOk()).andReturn();
 
         String content = result.getResponse().getContentAsString();
-        assertThat(content).contains(testUser.getEmail());
+        assertThat(content).contains(testLabel.getName());
     }
 
     @Test
     public void testShow() throws Exception {
-        MvcResult result = mockMvc.perform(
-                get(TEST_URL + "/{id}", testUser.getId())
-                        .with(jwt())
-        ).andExpect(status().isOk()).andReturn();
+        mockMvc.perform(
+                get(TEST_URL + "/{id}", testLabel.getId())
+                        .with(token)
+        ).andExpect(status().isOk());
 
-        String content = result.getResponse().getContentAsString();
-        assertThat(content).contains(testUser.getEmail(), testUser.getFirstName());
+        Label label = labelRepository.findById(testLabel.getId()).get();
+        assertThat(label.getName()).isEqualTo(testLabel.getName());
+        assertThat(label.getId()).isEqualTo(testLabel.getId());
     }
 
     @Test
     public void testCreate() throws Exception {
-        User createUser = Instancio.of(modelGenerator.getUserModel()).create();
+        Label labelToSave = Instancio.of(modelGenerator.getLabelModel()).create();
 
         mockMvc.perform(
                 post(TEST_URL)
                         .with(token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUser))
+                        .content(objectMapper.writeValueAsString(labelToSave))
         ).andExpect(status().isCreated());
 
-        User userFromRepo = userRepository.findByEmail(createUser.getEmail()).get();
-
-        assertNotNull(userFromRepo);
-        assertThat(createUser.getFirstName()).isEqualTo(userFromRepo.getFirstName());
-        assertThat(createUser.getEmail()).isEqualTo(userFromRepo.getEmail());
+        Label labelFromRepo = labelRepository.findByName(labelToSave.getName()).get();
+        assertThat(labelFromRepo.getName()).isEqualTo(labelToSave.getName());
     }
 
     @Test
     public void testUpdate() throws Exception {
-        Map<String, String> updateData = new HashMap<>() {{
-            put("firstName", "Andrew");
-            put("email", "mail@example.com");
+        Map<String, String> map = new HashMap<>(){{
+            put("name", "Test_Name");
         }};
 
         mockMvc.perform(
-                put(TEST_URL + "/{id}", testUser.getId())
+                put(TEST_URL + "/{id}", testLabel.getId())
                         .with(token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateData))
+                        .content(objectMapper.writeValueAsString(map))
         ).andExpect(status().isOk());
 
-        User updatedUser = userRepository.findById(testUser.getId()).get();
-        assertThat(updatedUser.getFirstName()).isEqualTo("Andrew");
-        assertThat(updatedUser.getEmail()).isEqualTo("mail@example.com");
+        Label updatedLabel = labelRepository.findByName("Test_Name").get();
+        assertThat(updatedLabel.getName()).isEqualTo("Test_Name");
     }
 
     @Test
     public void testDelete() throws Exception {
         mockMvc.perform(
-                delete(TEST_URL + "/{id}", testUser.getId())
+                delete(TEST_URL + "/{id}", testLabel.getId())
                         .with(token)
         ).andExpect(status().isNoContent());
 
-        assertTrue(userRepository.findById(testUser.getId()).isEmpty());
+        Optional<Label> optional = labelRepository.findById(testLabel.getId());
+        assertTrue(optional.isEmpty());
     }
 }
+

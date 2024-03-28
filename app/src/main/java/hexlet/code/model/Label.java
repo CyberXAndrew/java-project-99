@@ -2,30 +2,31 @@ package hexlet.code.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "statuses")
+@Table(name = "labels")
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class TaskStatus implements BaseEntity {
+public class Label implements BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Size(min = 3, max = 1000)
     @Column(unique = true)
     private String name;
-    @NotBlank
-    @Column(unique = true)
-    private String slug;
     @CreatedDate
     private Instant createdAt;
 
-//    @OneToMany(mappedBy = "taskStatus") // cascade = CascadeType.ALL
-//    private List<Task> tasks = new ArrayList<>();
+    @ManyToMany(mappedBy = "labels")
+    private Set<Task> tasks = new LinkedHashSet<>();
 }

@@ -17,14 +17,15 @@ public abstract class TaskMapper {
     @Mapping(target = "name", source = "title")
     @Mapping(target = "description", source = "content")
     @Mapping(target = "assignee", source = "assignee_id")
-//    @Mapping(target = "taskStatus", ignore = true) //
     @Mapping(target = "taskStatus", source = "status")
+    @Mapping(target = "labels", source = "labelIds") //TODO ??
     public abstract Task mapToModel(TaskCreateDTO taskCreateDTO);
 
     @Mapping(target = "title", source = "name")
     @Mapping(target = "content", source = "description")
     @Mapping(target = "assignee_id", source = "assignee.id")
     @Mapping(target = "status", source = "taskStatus.slug")
+    @Mapping(target = "labelIds", source = "labels")
 //    @InheritInverseConfiguration
     public abstract TaskDTO map(Task task);
 
@@ -33,5 +34,6 @@ public abstract class TaskMapper {
     @Mapping(source = "content", target = "description")
     @Mapping(source = "assignee_id", target = "assignee")
     @Mapping(source = "status", target = "taskStatus")
+    @Mapping(source = "labelIds", target = "labels")
     public abstract void update(TaskUpdateDTO updateDTO, @MappingTarget Task task);
 }

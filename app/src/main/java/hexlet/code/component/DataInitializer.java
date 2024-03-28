@@ -1,7 +1,9 @@
 package hexlet.code.component;
 
 import hexlet.code.dto.UserCreateDTO;
+import hexlet.code.model.Label;
 import hexlet.code.model.TaskStatus;
+import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -21,14 +24,25 @@ public class DataInitializer implements ApplicationRunner {
     private final UserService userService;
     @Autowired
     private TaskStatusRepository taskStatusRepository;
+    @Autowired
+    private LabelRepository labelRepository;
+
     @Override
     public void run(ApplicationArguments args) {
+        createAdministrator();
+        createDefaultStatuses();
+        createDefaultLabels();
+    }
+
+    public void createAdministrator() {
         UserCreateDTO userData = new UserCreateDTO();
         userData.setFirstName("Admin");
         userData.setEmail("hexlet@example.com");
         userData.setPassword("qwerty");
         userService.createUser(userData);
+    }
 
+    public void createDefaultStatuses() {
         TaskStatus draft = new TaskStatus();
         draft.setName("Draft");
         draft.setSlug("draft");
@@ -50,6 +64,15 @@ public class DataInitializer implements ApplicationRunner {
         published.setSlug("published");
 
         taskStatusRepository.saveAll(List.of(draft, toReview, toBeFixed, toPublish, published));
+    }
 
+    public void createDefaultLabels() {
+        Label bugLabel = new Label();
+        bugLabel.setName("bug");
+
+        Label featureLabel = new Label();
+        featureLabel.setName("feature");
+
+        labelRepository.saveAll(List.of(bugLabel, featureLabel));
     }
 }

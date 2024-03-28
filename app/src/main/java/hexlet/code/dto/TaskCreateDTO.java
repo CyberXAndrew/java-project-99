@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class TaskCreateDTO {
 
@@ -14,4 +16,8 @@ public class TaskCreateDTO {
     @NotNull
     private String status;
     private Long assignee_id;
+
+    //Сделайте возможность добавления меток в задачи
+    // при их создани и изменении
+    private Set<Long> labelIds;
 }

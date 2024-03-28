@@ -49,7 +49,6 @@ public class User implements UserDetails, BaseEntity {
     private Instant createdAt;
     @LastModifiedDate
     private Instant updatedAt;
-
 //    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "assignee") //, cascade = CascadeType.ALL

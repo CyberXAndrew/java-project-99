@@ -26,29 +26,26 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-
-
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // аннотации для сущности
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // аннотации валидации
 	// ТЕСТЫ
-	testImplementation(platform 'org.junit:junit-bom:5.10.0')
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	// Понадобится когда мы начнем работать с аутентификацией
 	testImplementation 'org.springframework.security:spring-security-test'
-	// предоставляет функциональность для сравнения и проверки JSON-структур
-	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
-	testImplementation 'junit:junit:4.13.2' // assertTrue
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+	testImplementation(platform 'org.junit:junit-bom:5.10.0')
 	testImplementation 'org.assertj:assertj-core:3.25.3'
+		// предоставляет функциональность для сравнения и проверки JSON-структур
+	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:3.2.2")
 	implementation 'org.instancio:instancio-junit:3.3.0'
 	implementation("net.datafaker:datafaker:2.1.0")
-
-	implementation 'com.h2database:h2:2.2.224'
-//	runtimeOnly("com.h2database:h2")
-
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+	// Базы данных
+	implementation 'com.h2database:h2:2.2.224'
+//	runtimeOnly("com.h2database:h2")
+
 
 }
 
