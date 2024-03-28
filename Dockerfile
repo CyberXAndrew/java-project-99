@@ -32,7 +32,7 @@ COPY app/src app/src
 
 COPY --from=frontend /frontend/dist /backend/src/main/resources/static
 
-RUN ./gradlew --no-daemon build
+RUN app/gradlew --no-daemon build
 
 ENV JAVA_OPTS "-Xmx512M -Xms512M"
 EXPOSE 8080
