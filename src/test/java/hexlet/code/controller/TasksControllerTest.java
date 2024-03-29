@@ -98,6 +98,7 @@ public class TasksControllerTest {
     }
 
     @Test
+    @Transactional
     public void testIndexWithParams() throws Exception {
         User user1 = Instancio.of(modelGenerator.getUserModel()).create();
         User user2 = Instancio.of(modelGenerator.getUserModel()).create();
