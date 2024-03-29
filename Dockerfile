@@ -50,7 +50,7 @@ WORKDIR /backend
 
 COPY ./ /backend
 
-RUN ./app/gradlew --no-daemon build
+RUN ./gradlew --no-daemon build
 
 EXPOSE 8080
 
