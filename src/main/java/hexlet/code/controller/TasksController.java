@@ -28,8 +28,8 @@ public class TasksController {
     private TaskRepository taskRepository; /////
 
     @GetMapping(path = "/tasks")
-    public ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params, @RequestParam(defaultValue = "1") int page) {
-        List<TaskDTO> allTasksWithParams = taskService.getAllTasksWithParams(params, page);
+    public ResponseEntity<List<TaskDTO>> index(TaskParamsDTO params) {
+        List<TaskDTO> allTasksWithParams = taskService.getAllTasksWithParams(params);
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(allTasksWithParams.size()))
                 .body(allTasksWithParams);
@@ -40,18 +40,6 @@ public class TasksController {
         return ResponseEntity.ok()
                 .header("X-Total-Count", String.valueOf(allTasks.size()))
                 .body(allTasks);
-    }
-
-    //////////////////////////////
-    @GetMapping(path = "/api/tasks1")
-    @ResponseStatus(HttpStatus.OK)
-    public Task deleteThis() {
-        List<Task> tasks = taskRepository.findAll();
-        Task task = new Task();
-        task.setName(tasks.get(0).getName());
-        task.setTaskStatus(tasks.get(0).getTaskStatus());
-        task.setLabels(tasks.get(0).getLabels());
-        return task;
     }
 
     @GetMapping(path = "/api/tasks/{id}")

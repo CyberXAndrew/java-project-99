@@ -29,15 +29,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -58,8 +62,8 @@ public class TasksControllerTest {
     private TaskStatusRepository taskStatusRepository;
     @Autowired
     private UserRepository userRepository;
-//    @Autowired
-//    private LabelRepository labelRepository;
+    @Autowired
+    private LabelRepository labelRepository;
     @Autowired
     private TaskMapper taskMapper;
 //    @Autowired
@@ -91,6 +95,51 @@ public class TasksControllerTest {
 
         List<Task> tasks = taskRepository.findAll();
         assertThat(tasks.stream().map(Task::getName)).contains(testTask.getName());
+    }
+
+    @Test
+    public void testIndexWithParams() throws Exception {
+        User user1 = Instancio.of(modelGenerator.getUserModel()).create();
+        User user2 = Instancio.of(modelGenerator.getUserModel()).create();
+        userRepository.saveAll(List.of(user1, user2));
+        TaskStatus status = taskStatusRepository.findBySlug("published").get();
+        Label bug = labelRepository.findByName("bug").get();
+        Label feature = labelRepository.findByName("feature").get();
+
+        Task task = Instancio.of(modelGenerator.getTaskModel()).create();
+        task.setName("Wrong_name");
+        task.setAssignee(user2);
+        task.setTaskStatus(status);
+        task.setLabels(Set.of(bug));
+        Task task1 = Instancio.of(modelGenerator.getTaskModel()).create();
+        task1.setName("Contains task name");
+        task1.setAssignee(user2);
+        task1.setTaskStatus(status);
+        task1.setLabels(Set.of(bug));
+        Task task2 = Instancio.of(modelGenerator.getTaskModel()).create();
+        task2.setName("Some_task");
+        task2.setAssignee(user1);
+        task2.setTaskStatus(status);
+        task2.setLabels(Set.of(feature));
+        taskRepository.saveAll(List.of(task, task1, task2));
+
+        String queryString1 = "?titleCont=task" +
+                "&assigneeId=" + user1.getId() +
+                "&status=published" +
+                "&labelId=" + feature.getId();
+
+        MvcResult result = mockMvc.perform(
+                get("/tasks" + queryString1)
+                        .with(token)
+        ).andExpect(status().isOk()).andReturn();
+        String content = result.getResponse().getContentAsString();
+        List<TaskDTO> taskList = objectMapper.readValue(content, new TypeReference<>() {});
+        assertThat(taskList).hasSize(1);
+        assertThat(taskList.get(0).getId()).isEqualTo(task2.getId());
+        assertThat(taskList.get(0).getTitle()).contains("task");
+        assertThat(taskList.get(0).getAssignee_id()).isEqualTo(user1.getId());
+        assertThat(taskList.get(0).getStatus()).isEqualTo(status.getSlug());
+        assertThat(taskList.get(0).getLabelIds()).isEqualTo(Set.of(2L));
     }
 
     @Test
@@ -160,36 +209,4 @@ public class TasksControllerTest {
 
         assertThat(taskRepository.findById(testTask.getId())).isEmpty();
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    @Test
-    @Transactional
-    public void myMethod() throws Exception {
-        TaskCreateDTO testtask = new TaskCreateDTO();
-        testtask.setTitle("test_title");
-        testtask.setStatus("published");
-        testtask.setLabelIds(Set.of(2L, 1L));
-
-        Task tasktosave = taskMapper.mapToModel(testtask);
-        Task saved = taskRepository.save(tasktosave);
-        System.out.println(saved.toString() + " TASK DTO SAVING WITH/OUT MAPPING");
-        System.out.println(saved.getLabels().toString() + " LABELS IN SAVED TASK ");
-
-        MvcResult mvcResult = mockMvc.perform(
-                get(TEST_URL)
-                        .with(token)
-        ).andExpect(status().isOk()).andReturn();
-
-        String content = mvcResult.getResponse().getContentAsString();
-        List<TaskDTO> myClassList = objectMapper.readValue(content, new TypeReference<List<TaskDTO>>() {});
-
-// Проверяем, что список не пустой и содержит экземпляры класса MyClass
-        assertThat(myClassList).isNotEmpty();
-        assertThat(myClassList).allMatch(myClas -> myClas instanceof TaskDTO);
-
-        System.out.println(content + " TASKDTO FROM RESPONSE - LABELIDS");
-
-    }
-
-
 }

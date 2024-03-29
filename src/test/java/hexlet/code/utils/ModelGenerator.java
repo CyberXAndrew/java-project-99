@@ -35,26 +35,25 @@ public class ModelGenerator {
     private void init() {
         userModel = Instancio.of(User.class)
                 .ignore(Select.field(User::getId))
-//                .ignore(Select.field(User::getCreatedAt))
+                .ignore(Select.field(User::getCreatedAt))
                 .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
                 .supply(Select.field(User::getPasswordDigest), () -> faker.internet().password())
                 .toModel();
 
         taskStatusModel = Instancio.of(TaskStatus.class)
                 .ignore(Select.field(TaskStatus::getId))
-//                .ignore(Select.field(TaskStatus::getCreatedAt))
+                .ignore(Select.field(TaskStatus::getCreatedAt))
                 .supply(Select.field(TaskStatus::getSlug), () -> faker.internet().slug())
                 .toModel();
 
         taskModel = Instancio.of(Task.class)
                 .ignore(Select.field(Task::getId))
-//                .ignore(Select.field(Task::getCreatedAt))
+                .ignore(Select.field(Task::getCreatedAt))
                 .toModel();
 
         labelModel = Instancio.of(Label.class)
                 .ignore(Select.field(Label::getId))
                 .ignore(Select.field(Label::getCreatedAt))
-                .ignore(Select.field(Label::getTasks))
                 .toModel();
     }
 }

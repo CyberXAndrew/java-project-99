@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,23 +20,21 @@ public class Task implements BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    private String name; //обязательное
+    private String name;
     private Integer index;
     private String description;
     @NotNull
     @JoinColumn(name = "task_status_id")
     @ManyToOne
-    private TaskStatus taskStatus; //- обязательное. Связано с сущностью статуса
-//    @JoinColumn(name = "assignee_id")
+    private TaskStatus taskStatus;
     @ManyToOne
-    private User assignee; // Не обязательное. Исполнитель задачи, связан с сущностью пользователя
+    private User assignee;
     @CreatedDate
     private Instant createdAt;
-
-    @ManyToMany //(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "task_label",
             joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn( name = "label_id")
+            inverseJoinColumns = @JoinColumn(name = "label_id")
     )
     private Set<Label> labels = new LinkedHashSet<>();
 }

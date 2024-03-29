@@ -1,33 +1,55 @@
-.DEFAULT_GOAL := build-run
+setup:
+	npm install
+	./gradlew wrapper --gradle-version 8.6
+	./gradlew build
+
+frontend:
+	make -C frontend start
+
+backend:
+	./gradlew bootRun --args='--spring.profiles.active=dev'
 
 clean:
-	make -C app clean
+	./gradlew clean
 
 build:
-	make -C app build
+	./gradlew clean build
+
+dev:
+	heroku local
+
+reload-classes:
+	./gradlew -t classes
+
+start-prod:
+	./gradlew bootRun --args='--spring.profiles.active=prod'
 
 install:
-	make -C app install
+	./gradlew installDist
 
-run-dist:
-	make -C run-dist
-
-run:
-	make -C app run
-
-test:
-	make -C app test
-
-report:
-	make -C app report
+# start-dist:
+# 	./build/install/app/bin/app
 
 lint:
-	make -C app lint
+	./gradlew checkstyleMain checkstyleTest
 
-update-deps:
-	make -C app update-deps
+test:
+	./gradlew test
+
+report:
+	./gradlew jacocoTestReport
+
+update-js-deps:
+	npx ncu -u
+
+check-java-deps:
+	./gradlew dependencyUpdates -Drevision=release
+
+# generate-migrations:
+# 	gradle diffChangeLog
+#
+# db-migrate:
+# 	./gradlew update
 
 
-build-run: build run
-
-.PHONY: build
+.PHONY: build frontend

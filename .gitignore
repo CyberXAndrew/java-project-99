@@ -37,7 +37,6 @@ out/
 ### VS Code ###
 .vscode/
 
-
 .DS_Store
 *.db
 
@@ -45,11 +44,11 @@ node
 
 .env
 
-app/node_modules
+node_modules
 .tmp
 
-
-!app/src/src/main/resources/static/.gitkeep
+#src/main/resources/static
+!src/main/resources/static/.gitkeep
 
 # Logs
 logs
@@ -60,7 +59,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-app/node_modules
+node_modules
 dist
 dist-ssr
 *.local

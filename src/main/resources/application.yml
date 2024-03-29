@@ -1,0 +1,28 @@
+---
+logging:
+  level:
+    root: WARN
+
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    default: development
+
+server:
+  address: 0.0.0.0
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+
+sentry:
+  dsn: https://855e305fdc5c1d8418519664894682bf@o4506994537070592.ingest.us.sentry.io/4506994563678208
+  # Set traces-sample-rate to 1.0 to capture 100% of transactions for performance monitoring.
+  # We recommend adjusting this value in production.
+  traces-sample-rate: 1.0
+  exception-resolver-order: -2147483647

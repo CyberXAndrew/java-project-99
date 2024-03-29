@@ -29,7 +29,7 @@ public class TaskService {
     @Autowired
     private TaskSpecification specBuilder;
 
-    public List<TaskDTO> getAllTasksWithParams(TaskParamsDTO params, int page) {
+    public List<TaskDTO> getAllTasksWithParams(TaskParamsDTO params) {
         Specification<Task> specification = specBuilder.build(params);
         List<Task> allTasksWithParams = taskRepository.findAll(specification); //, PageRequest.of(page - 1, DEF_PAGE_SIZE));
         return allTasksWithParams.stream()
