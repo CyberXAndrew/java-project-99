@@ -14,6 +14,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "labels")
@@ -29,6 +30,6 @@ public class Label implements BaseEntity {
     @Column(unique = true)
     private String name;
     @CreatedDate
-    private Instant createdAt;
+    private LocalDate createdAt;
 
 }

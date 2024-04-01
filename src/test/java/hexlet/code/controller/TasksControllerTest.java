@@ -149,11 +149,13 @@ public class TasksControllerTest {
     }
 
     @Test
+    @Transactional
     public void testCreate() throws Exception {
         TaskStatus status = taskStatusRepository.findBySlug("draft").get();
         TaskCreateDTO taskToSave = new TaskCreateDTO();
         taskToSave.setTitle("Test_Name");
         taskToSave.setStatus(status.getSlug());
+        taskToSave.setLabelIds(Set.of(1L)); // TODO
 
         mockMvc.perform(
                 post(TEST_URL)
@@ -167,6 +169,8 @@ public class TasksControllerTest {
         assertNotNull(savedTask);
         assertThat(savedTask.getName()).isEqualTo(taskToSave.getTitle());
         assertThat(savedTask.getTaskStatus().getSlug()).isEqualTo(taskToSave.getStatus());
+        assertThat(savedTask.getLabels()).isNotEmpty();
+        assertThat(savedTask.getLabels().toString()).contains("bug"); // bug id = 1
     }
 
     @Test
