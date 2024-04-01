@@ -31,24 +31,24 @@ public abstract class ReferenceMapper {
         return id != null ? entityManager.find(entityClass, id) : null;
     }
 
-    public <T extends BaseEntity> T toEntity(String slug, @TargetType Class<T> entityClass) {
+    public TaskStatus toEntity(String slug) { // TODO FIX UNNECESSARY
         TaskStatus status = taskStatusRepository.findBySlug(slug).orElseThrow();
-        return slug != null ? (T) status : null;
+        return slug != null ? status : null;
     }
 
-    public Set<Label> idToLabel(Set<Long> labelIds) {
+    public Set<Label> idToLabel(Set<Long> taskLabelIds) {
         System.out.println(" idToLabel РАБОТАЕТ МАППИНГ ИЗ Set<LONG> в Set<LABEL> ");
-        Set<Label> labels = labelRepository.findByIdIn(labelIds);
+        Set<Label> labels = labelRepository.findByIdIn(taskLabelIds);
         Set<Label> objects = !labels.isEmpty() ? labels : Collections.emptySet();
         return objects;
     }
 
     public Set<Long> labelToId(Set<Label> labels) {
         System.out.println(" labelToId РАБОТАЕТ МАППИНГ ИЗ Set<LABEL> в Set<LONG> ");
-        Set<Long> labelIds = new LinkedHashSet<>();
+        Set<Long> taskLabelIds = new LinkedHashSet<>();
         for (Label label : labels) {
-            labelIds.add(label.getId());
+            taskLabelIds.add(label.getId());
         }
-        return labelIds;
+        return taskLabelIds;
     }
 }

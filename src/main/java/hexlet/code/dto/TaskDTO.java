@@ -14,5 +14,5 @@ public class TaskDTO {
     private String status;
     private Long assignee_id;
     private Instant createdAt;
-    private Set<Long> labelIds;
+    private Set<Long> taskLabelIds;
 }

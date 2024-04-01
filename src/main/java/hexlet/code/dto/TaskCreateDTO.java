@@ -17,5 +17,5 @@ public class TaskCreateDTO {
     private String status;
     private Long assignee_id;
 
-    private Set<Long> labelIds;
+    private Set<Long> taskLabelIds;
 }

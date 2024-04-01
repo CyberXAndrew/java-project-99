@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskDTO;
-import hexlet.code.mapper.TaskMapper;
 import hexlet.code.model.Label;
 import hexlet.code.model.Task;
 import hexlet.code.model.TaskStatus;
@@ -51,8 +50,6 @@ public class TasksControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private TaskMapper taskMapper;
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
@@ -133,7 +130,7 @@ public class TasksControllerTest {
         assertThat(taskList.get(0).getTitle()).contains("task");
         assertThat(taskList.get(0).getAssignee_id()).isEqualTo(user1.getId());
         assertThat(taskList.get(0).getStatus()).isEqualTo(status.getSlug());
-        assertThat(taskList.get(0).getLabelIds()).isEqualTo(Set.of(2L));
+        assertThat(taskList.get(0).getTaskLabelIds()).isEqualTo(Set.of(2L));
     }
 
     @Test
@@ -155,7 +152,7 @@ public class TasksControllerTest {
         TaskCreateDTO taskToSave = new TaskCreateDTO();
         taskToSave.setTitle("Test_Name");
         taskToSave.setStatus(status.getSlug());
-        taskToSave.setLabelIds(Set.of(1L)); // TODO
+        taskToSave.setTaskLabelIds(Set.of(1L)); // TODO
 
         mockMvc.perform(
                 post(TEST_URL)
@@ -170,7 +167,7 @@ public class TasksControllerTest {
         assertThat(savedTask.getName()).isEqualTo(taskToSave.getTitle());
         assertThat(savedTask.getTaskStatus().getSlug()).isEqualTo(taskToSave.getStatus());
         assertThat(savedTask.getLabels()).isNotEmpty();
-        assertThat(savedTask.getLabels().toString()).contains("bug"); // bug id = 1
+        assertThat(savedTask.getLabels().toString()).contains("bug");
     }
 
     @Test
