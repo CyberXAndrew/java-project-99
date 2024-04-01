@@ -2,9 +2,9 @@
 # development - h2
 
 spring:
-  h2:
-    console.enabled: true
   datasource:
     url: "jdbc:h2:mem:myH2db"
     username: sa
     password:
+  h2:
+    console.enabled: true
