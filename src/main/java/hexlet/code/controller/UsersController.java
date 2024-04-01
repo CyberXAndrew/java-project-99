@@ -26,10 +26,6 @@ import java.util.List;
 public class UsersController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserMapper mapper;
-    @Autowired
     private UserService userService;
 
     @GetMapping(path = "")

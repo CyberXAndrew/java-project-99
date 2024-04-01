@@ -1,12 +1,10 @@
 package hexlet.code.dto;
 
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.openapitools.jackson.nullable.JsonNullable;
 
-@Getter
-@Setter
+@Data
 public class TaskStatusUpdateDTO {
     @Column(unique = true)
     private JsonNullable<String> name;

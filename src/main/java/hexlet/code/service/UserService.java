@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -20,8 +21,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();

@@ -1,15 +1,11 @@
 package hexlet.code.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.openapitools.jackson.nullable.JsonNullable;
 
 import java.util.Set;
 
 @Data
-@Getter
-@Setter
 public class TaskUpdateDTO {
 
     private JsonNullable<String> title;
