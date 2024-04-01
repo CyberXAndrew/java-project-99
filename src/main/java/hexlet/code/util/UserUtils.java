@@ -1,6 +1,5 @@
 package hexlet.code.util;
 
-import com.nimbusds.jose.proc.SecurityContext;
 import hexlet.code.model.User;
 import hexlet.code.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

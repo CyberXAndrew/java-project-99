@@ -4,11 +4,17 @@ import hexlet.code.dto.UserDTO;
 import hexlet.code.model.User;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserUpdateDTO;
-import org.mapstruct.*;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.BeforeMapping;
+import org.mapstruct.InheritConfiguration;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(
         uses = { JsonNullableMapper.class, ReferenceMapper.class },
@@ -23,6 +29,7 @@ public abstract class UserMapper {
     @Mapping(target = "passwordDigest", source = "password")
     public abstract User map(UserCreateDTO userCreateDTO);
     public abstract UserDTO map(User user);
+    @InheritConfiguration
     public abstract void update(UserUpdateDTO updateDTO, @MappingTarget User user);
 
     @BeforeMapping

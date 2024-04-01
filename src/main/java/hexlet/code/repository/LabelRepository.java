@@ -9,5 +9,4 @@ import java.util.Set;
 public interface LabelRepository extends JpaRepository<Label, Long> {
     Optional<Label> findByName(String name);
     Set<Label> findByIdIn(Set<Long> labelIds);
-//    Set<Long> findIdsByTasksLabels(Set<Label> labels);
 }

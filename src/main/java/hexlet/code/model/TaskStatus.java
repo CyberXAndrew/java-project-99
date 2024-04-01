@@ -1,19 +1,24 @@
 package hexlet.code.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "statuses")
 @Data
 @EntityListeners(AuditingEntityListener.class)
 public class TaskStatus implements BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,6 +31,4 @@ public class TaskStatus implements BaseEntity {
     @CreatedDate
     private Instant createdAt;
 
-//    @OneToMany(mappedBy = "taskStatus") // cascade = CascadeType.ALL
-//    private List<Task> tasks = new ArrayList<>();
 }

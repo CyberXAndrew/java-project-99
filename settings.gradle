@@ -5,4 +5,4 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'app'
+rootProject.name = 'java-project-99'

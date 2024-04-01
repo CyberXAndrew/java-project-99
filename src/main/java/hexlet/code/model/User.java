@@ -1,6 +1,5 @@
 package hexlet.code.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.EntityListeners;
@@ -13,7 +12,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -35,7 +33,6 @@ public class User implements UserDetails, BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
     private String firstName;
     private String lastName;
     @NotBlank
@@ -50,8 +47,7 @@ public class User implements UserDetails, BaseEntity {
     @LastModifiedDate
     private Instant updatedAt;
 //    @JsonIgnore
-    @ToString.Exclude
-    @OneToMany(mappedBy = "assignee") //, cascade = CascadeType.ALL
+    @OneToMany(mappedBy = "assignee")
     private List<Task> tasks = new ArrayList<>();
 
     @Override

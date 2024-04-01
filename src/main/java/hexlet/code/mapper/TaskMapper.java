@@ -4,7 +4,12 @@ import hexlet.code.dto.TaskCreateDTO;
 import hexlet.code.dto.TaskDTO;
 import hexlet.code.dto.TaskUpdateDTO;
 import hexlet.code.model.Task;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(
         uses = {JsonNullableMapper.class, ReferenceMapper.class},
@@ -18,7 +23,7 @@ public abstract class TaskMapper {
     @Mapping(target = "description", source = "content")
     @Mapping(target = "assignee", source = "assignee_id")
     @Mapping(target = "taskStatus", source = "status")
-    @Mapping(target = "labels", source = "labelIds") //TODO ??
+    @Mapping(target = "labels", source = "labelIds")
     public abstract Task mapToModel(TaskCreateDTO taskCreateDTO);
 
     @Mapping(target = "title", source = "name")

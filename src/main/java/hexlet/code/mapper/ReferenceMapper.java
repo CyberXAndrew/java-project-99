@@ -4,7 +4,9 @@ import hexlet.code.model.Label;
 import hexlet.code.model.TaskStatus;
 import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskStatusRepository;
-import org.mapstruct.*;
+import org.mapstruct.TargetType;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import hexlet.code.model.BaseEntity;
@@ -38,14 +40,15 @@ public abstract class ReferenceMapper {
         System.out.println(" idToLabel РАБОТАЕТ МАППИНГ ИЗ Set<LONG> в Set<LABEL> ");
         Set<Label> labels = labelRepository.findByIdIn(labelIds);
         Set<Label> objects = !labels.isEmpty() ? labels : Collections.emptySet();
-        System.out.println(objects.toString() + " ПУСТОЙ ЛИ СЕТ ЛЕЙБЛОВ? ");
         return objects;
     }
 
     public Set<Long> labelToId(Set<Label> labels) {
         System.out.println(" labelToId РАБОТАЕТ МАППИНГ ИЗ Set<LABEL> в Set<LONG> ");
         Set<Long> labelIds = new LinkedHashSet<>();
-        for (Label label : labels) labelIds.add(label.getId());
+        for (Label label : labels) {
+            labelIds.add(label.getId());
+        }
         return labelIds;
     }
 }

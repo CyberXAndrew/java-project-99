@@ -13,7 +13,6 @@ import hexlet.code.repository.LabelRepository;
 import hexlet.code.repository.TaskRepository;
 import hexlet.code.repository.TaskStatusRepository;
 import hexlet.code.repository.UserRepository;
-import hexlet.code.service.TaskService;
 import hexlet.code.utils.ModelGenerator;
 import org.instancio.Instancio;
 import org.instancio.Select;
@@ -29,19 +28,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -57,6 +52,8 @@ public class TasksControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
+    private TaskMapper taskMapper;
+    @Autowired
     private TaskRepository taskRepository;
     @Autowired
     private TaskStatusRepository taskStatusRepository;
@@ -64,10 +61,6 @@ public class TasksControllerTest {
     private UserRepository userRepository;
     @Autowired
     private LabelRepository labelRepository;
-    @Autowired
-    private TaskMapper taskMapper;
-//    @Autowired
-//    private TaskService taskService;
 
     @BeforeEach
     public void beforeEach() {
@@ -130,7 +123,7 @@ public class TasksControllerTest {
                 "&labelId=" + feature.getId();
 
         MvcResult result = mockMvc.perform(
-                get("/tasks" + queryString1)
+                get(TEST_URL + queryString1)
                         .with(token)
         ).andExpect(status().isOk()).andReturn();
         String content = result.getResponse().getContentAsString();

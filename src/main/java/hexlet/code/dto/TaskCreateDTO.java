@@ -17,7 +17,5 @@ public class TaskCreateDTO {
     private String status;
     private Long assignee_id;
 
-    //Сделайте возможность добавления меток в задачи
-    // при их создани и изменении
     private Set<Long> labelIds;
 }

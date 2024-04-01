@@ -17,8 +17,5 @@ public class TaskUpdateDTO {
     private JsonNullable<String> content;
     private JsonNullable<String> status;
     private JsonNullable<Long> assignee_id;
-
-    //Сделайте возможность добавления меток в задачи
-    // при их создании и изменении
     private JsonNullable<Set<Long>> labelIds;
 }
