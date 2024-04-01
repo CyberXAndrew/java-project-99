@@ -18,7 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,9 +43,9 @@ public class User implements UserDetails, BaseEntity {
     @Size(min = 3)
     private String passwordDigest;
     @CreatedDate
-    private Instant createdAt;
+    private LocalDate createdAt;
     @LastModifiedDate
-    private Instant updatedAt;
+    private LocalDate updatedAt;
 //    @JsonIgnore
     @OneToMany(mappedBy = "assignee")
     private List<Task> tasks = new ArrayList<>();

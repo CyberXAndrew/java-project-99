@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "statuses")
@@ -29,6 +29,6 @@ public class TaskStatus implements BaseEntity {
     @Column(unique = true)
     private String slug;
     @CreatedDate
-    private Instant createdAt;
+    private LocalDate createdAt;
 
 }

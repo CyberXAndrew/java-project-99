@@ -16,7 +16,7 @@ import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -39,7 +39,7 @@ public class Task implements BaseEntity {
     @ManyToOne
     private User assignee;
     @CreatedDate
-    private Instant createdAt;
+    private LocalDate createdAt;
     @ManyToMany
     @JoinTable(name = "task_label",
             joinColumns = @JoinColumn(name = "task_id"),
