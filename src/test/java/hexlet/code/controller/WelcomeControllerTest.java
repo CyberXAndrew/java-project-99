@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,7 +22,7 @@ public class WelcomeControllerTest {
     public void testHomepage() throws Exception {
         MvcResult result = mockMvc.perform(
                 get("/welcome")
-//                        .with(jwt())
+                        .with(jwt())
         ).andExpect(status().isOk()).andReturn();
         String content = result.getResponse().getContentAsString();
         assertThat(content).contains("Welcome to Spring");

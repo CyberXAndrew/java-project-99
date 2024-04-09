@@ -37,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LabelsControllerTest {
 
     private final static String TEST_URL = "/api/labels";
+    private static final String ADMINISTRATORS_EMAIL = "hexlet@example.com";
     private Label testLabel;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
@@ -51,7 +52,7 @@ public class LabelsControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
+        token = jwt().jwt(builder -> builder.subject(ADMINISTRATORS_EMAIL));
         testLabel = Instancio.of(modelGenerator.getLabelModel()).create();
         labelRepository.save(testLabel);
     }

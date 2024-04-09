@@ -39,6 +39,7 @@ public class TasksStatusesControllerTest {
     private TaskStatus testTaskStatus;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
     private static final String TEST_URL = "/api/task_statuses";
+    private static final String ADMINISTRATORS_EMAIL = "hexlet@example.com";
     private static final Long DRAFT_STATUS_DB_ID = 1L;
 
     @Autowired
@@ -52,7 +53,7 @@ public class TasksStatusesControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
+        token = jwt().jwt(builder -> builder.subject(ADMINISTRATORS_EMAIL));
         testTaskStatus = Instancio.of(modelGenerator.getTaskStatusModel()).create();
         taskStatusRepository.save(testTaskStatus);
     }

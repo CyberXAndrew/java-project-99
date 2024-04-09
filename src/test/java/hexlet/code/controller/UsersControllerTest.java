@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UsersControllerTest {
 
     private final static String TEST_URL = "/api/users";
+    private static final String ADMINISTRATORS_EMAIL = "hexlet@example.com";
     private User testUser;
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
 
@@ -52,7 +53,7 @@ public class UsersControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
+        token = jwt().jwt(builder -> builder.subject(ADMINISTRATORS_EMAIL));
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
         userRepository.save(testUser);
     }
@@ -90,7 +91,7 @@ public class UsersControllerTest {
 
         mockMvc.perform(
                 post(TEST_URL)
-                        .with(token)
+                        .with(jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createUser))
         ).andExpect(status().isCreated());
@@ -111,7 +112,7 @@ public class UsersControllerTest {
 
         mockMvc.perform(
                 put(TEST_URL + "/{id}", testUser.getId())
-                        .with(token)
+                        .with(jwt().jwt(builder -> builder.subject(testUser.getEmail())))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateData))
         ).andExpect(status().isOk());
@@ -125,7 +126,7 @@ public class UsersControllerTest {
     public void testDelete() throws Exception {
         mockMvc.perform(
                 delete(TEST_URL + "/{id}", testUser.getId())
-                        .with(token)
+                        .with(jwt().jwt(builder -> builder.subject(testUser.getEmail())))
         ).andExpect(status().isNoContent());
 
         assertTrue(userRepository.findById(testUser.getId()).isEmpty());

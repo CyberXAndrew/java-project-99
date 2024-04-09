@@ -44,7 +44,6 @@ dependencies {
 	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 	// Базы данных
-//	implementation 'com.h2database:h2:2.2.224'
 	runtimeOnly("com.h2database:h2")
 
 

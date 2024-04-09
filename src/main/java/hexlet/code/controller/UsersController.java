@@ -3,13 +3,12 @@ package hexlet.code.controller;
 import hexlet.code.dto.UserCreateDTO;
 import hexlet.code.dto.UserDTO;
 import hexlet.code.dto.UserUpdateDTO;
-import hexlet.code.mapper.UserMapper;
-import hexlet.code.repository.UserRepository;
 import hexlet.code.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,12 +48,14 @@ public class UsersController {
     }
 
     @PutMapping(path = "/{id}")
+    @PreAuthorize(value = "@userService.findUserById(#id).getEmail() == authentication.name")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO update(@Valid @RequestBody UserUpdateDTO updateDTO, @PathVariable Long id) {
         return userService.updateUser(updateDTO, id);
     }
 
     @DeleteMapping(path = "/{id}")
+    @PreAuthorize(value = "@userService.findUserById(#id).getEmail() == authentication.name")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         userService.deleteUserById(id);

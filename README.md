@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/CyberXAndrew/java-project-99/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/CyberXAndrew/java-project-99/actions)
+[![Actions Status](https://github.com/CyberXAndrew/java-project-99/actions/workflows/main.yml/badge.svg)](https://github.com/CyberXAndrew/java-project-99/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5224830a641e25df69e7/maintainability)](https://codeclimate.com/github/CyberXAndrew/java-project-99/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5224830a641e25df69e7/test_coverage)](https://codeclimate.com/github/CyberXAndrew/java-project-99/test_coverage)
 
@@ -10,7 +11,7 @@ executors and change their statuses. Registration and authentication are require
 
 ### Link to deployed application:
 
-[Spring Boot application](https://java-project-99-ovy7.onrender.com)
+[Task Manager](https://java-project-99-ovy7.onrender.com)
 
 
 ### Run
@@ -18,7 +19,7 @@ executors and change their statuses. Registration and authentication are require
 ./gradlew run
 ```
 
-### Technologies used
+### Technologies used:
 | Technology                           | Realization                                        |
 |--------------------------------------|----------------------------------------------------|
 | Programming language:                | Java 20                                            |

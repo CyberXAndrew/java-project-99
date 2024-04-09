@@ -42,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TasksControllerTest {
     private static final String TEST_URL = "/api/tasks";
+    private static final String ADMINISTRATORS_EMAIL = "hexlet@example.com";
     private SecurityMockMvcRequestPostProcessors.JwtRequestPostProcessor token;
     private Task testTask;
     @Autowired
@@ -61,7 +62,7 @@ public class TasksControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        token = jwt().jwt(builder -> builder.subject("hexlet@example.com"));
+        token = jwt().jwt(builder -> builder.subject(ADMINISTRATORS_EMAIL));
         TaskStatus status = taskStatusRepository.findBySlug("draft").orElseThrow();
         testTask = Instancio.of(modelGenerator.getTaskModel())
                 .set(Select.field(Task::getAssignee), null)
